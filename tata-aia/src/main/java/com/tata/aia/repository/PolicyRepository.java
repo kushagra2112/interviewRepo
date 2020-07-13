@@ -1,14 +1,17 @@
 package com.tata.aia.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.tata.aia.model.Policy;
+import com.tata.aia.model.CustomerPolicy;
 
 @Repository
-public interface PolicyRepository extends JpaRepository<Policy, Long> {
-	
-	List<Policy> findByCustomerName(String name);
+public interface PolicyRepository extends JpaRepository<CustomerPolicy, Long> {
+	List<CustomerPolicy> findByCustomerName(String name);
+	List<CustomerPolicy> findByMobileNumber(long number);
+	List<CustomerPolicy> findByMobileNumberAndDob(long mobileNumber, Date dob);
+	List<CustomerPolicy> findByEmailAddressAndDob(String email, Date dob);
 }

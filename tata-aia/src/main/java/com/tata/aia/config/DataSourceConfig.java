@@ -13,9 +13,9 @@ public class DataSourceConfig {
 	public DataSource getDataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 	    dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-	    dataSource.setUrl("jdbc:mysql://localhost:3306/tata_aia?useSSL=false");
+	    dataSource.setUrl("jdbc:mysql://localhost:3306/tata_aia?useSSL=true");
 	    dataSource.setUsername( "root" );
-	    dataSource.setPassword( "Maddy1234$" );
+	    dataSource.setPassword( "Admin@123" );
 	    return dataSource;
 	}
 }
