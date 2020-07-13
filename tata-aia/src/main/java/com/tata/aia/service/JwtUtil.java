@@ -8,7 +8,6 @@ import java.util.function.Function;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.tata.aia.exceptions.TokenNotValidException;
@@ -106,10 +105,10 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS512, secret2).compact();
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails, int tokeyType) {
+   /* public Boolean validateToken(String token, UserDetails userDetails, int tokeyType) {
         final String mobileNumber = extractUsername(token, tokeyType);
         return (mobileNumber.equals(userDetails.getUsername()) && !isTokenExpired(token, tokeyType));
-    }
+    }*/
     
     public Boolean validateToken(String token, CustomerPolicy customerDetails, int tokeyType) {
         final String mobileNumber = extractUsername(token, tokeyType);

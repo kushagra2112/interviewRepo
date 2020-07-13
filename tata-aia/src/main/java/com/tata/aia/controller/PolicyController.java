@@ -5,8 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,11 +21,15 @@ import com.tata.aia.model.StepComplitionResponse;
 import com.tata.aia.model.ValidationRequestResponse;
 import com.tata.aia.repository.PolicyRepository;
 import com.tata.aia.service.JwtUtil;
-import com.tata.aia.service.MobileOtpInStepOneService;
+import com.tata.aia.service.MobileOptInService;
 import com.tata.aia.service.PolicyService;
 import com.tata.aia.service.SecurityToken;
 import com.tata.aia.service.ServiceRequestData;
 import com.tata.aia.service.ValidateDataImp;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.Contact;
 
 @RestController
 @ResponseBody
@@ -46,7 +48,7 @@ public class PolicyController {
 	private ServiceRequestData serviceRequestData;
 
 	@Autowired
-	private MobileOtpInStepOneService mobileOtpInStepOneService;
+	private MobileOptInService mobileOtpInStepOneService;
 
 	@Autowired
 	private PolicyRepository policyRepository;
@@ -58,7 +60,12 @@ public class PolicyController {
 	JwtUtil jwtTokenObject;
 
 	@PostMapping(path = "/authenticate")
-	public ResponseEntity<SecurityTokenResponse> getToken(@RequestParam long mobileNumber, @RequestParam int otp) {
+	@ApiOperation(value = "Generate Security Token",
+	notes = "This function is used to generate token for the user",
+	response = Contact.class)
+	public ResponseEntity<SecurityTokenResponse> getToken(
+			@ApiParam(value = "Mobile Number") @RequestParam long mobileNumber,
+			@ApiParam(value = "OTP") @RequestParam int otp) {
 		logger.info("Serving request for authentication");
 		try {
 			int entryCount = policyRepository.findByMobileNumber(mobileNumber).size();
@@ -72,8 +79,12 @@ public class PolicyController {
 	}
 
 	@PostMapping(path = "/getPolicyDetails")
-	public ResponseEntity<PolicyServiceDetails> getPolicyDetailsByPhoneNumber(@RequestParam long policyNumber,
-			@RequestParam String jwtToken) {
+	@ApiOperation(value = "Get Policy Details",
+	notes = "Returns Complete Policy Details, return an error response is policy is not present or invalid",
+	response = Contact.class)
+	public ResponseEntity<PolicyServiceDetails> getPolicyDetailsByPhoneNumber(
+			@ApiParam(value = "Policy Number") @RequestParam long policyNumber,
+			@ApiParam(value = "JWT token generated previously") @RequestParam String jwtToken) {
 		logger.info("Serving request for fetching policy details");
 
 		// validating token
@@ -92,8 +103,13 @@ public class PolicyController {
 	}
 
 	@PostMapping(path = "/validateEmail")
-	public ResponseEntity<ValidationRequestResponse> validateEmailAddress(@RequestParam String eMail,
-			@RequestParam String dob, @RequestParam String jwtToken) {
+	@ApiOperation(value = "Validate's your email address",
+	notes = "Return your validated email if both email and dob matched to your policies",
+	response = Contact.class)
+	public ResponseEntity<ValidationRequestResponse> validateEmailAddress(
+			@ApiParam(value = "eMail Arrdess") @RequestParam String eMail,
+			@ApiParam(value = "Date Of Birth Sample Format (YYYY-MM-DD)") @RequestParam String dob,
+			@ApiParam(value = "JWT token generated previously") @RequestParam String jwtToken) {
 		logger.info("Serving request for validating email");
 
 		// validating token
@@ -111,8 +127,13 @@ public class PolicyController {
 	}
 
 	@PostMapping(path = "/validateMobileNumber")
-	public ResponseEntity<ValidationRequestResponse> validateMobileNumberRequest(@RequestParam long mobileNumber,
-			@RequestParam String dob, @RequestParam String jwtToken) {
+	@ApiOperation(value = "Validate's your mobile number",
+	notes = "Return your validated mobile number if both mobile number and dob matched to any of your policies",
+	response = Contact.class)
+	public ResponseEntity<ValidationRequestResponse> validateMobileNumberRequest(
+			@ApiParam(value = "Mobile Number") @RequestParam long mobileNumber,
+			@ApiParam(value = "Date Of Birth Sample Format (YYYY-MM-DD)")@RequestParam String dob,
+			@ApiParam(value = "JWT token generated previously") @RequestParam String jwtToken) {
 		logger.info("Serving request for validating mobile number");
 
 		// validating token
@@ -130,8 +151,13 @@ public class PolicyController {
 	}
 
 	@PostMapping(path = "/updateMobileNumber")
-	public ResponseEntity<ServiceRequestResponse> updateMobileNumberRequest(@RequestParam long mobileNumber,
-			@RequestParam long policyNumber, @RequestParam String jwtToken) {
+	@ApiOperation(value = "Update yor mobile number",
+	notes = "Returns you a service ticket if alteast one record matches with you policy number",
+	response = Contact.class)
+	public ResponseEntity<ServiceRequestResponse> updateMobileNumberRequest(
+			@ApiParam(value = "Mobile Number") @RequestParam long mobileNumber,
+			@ApiParam(value = "Reference Policy Number") @RequestParam long policyNumber,
+			@ApiParam(value = "JWT token generated previously") @RequestParam String jwtToken) {
 		logger.info("Serving request for update mobile number");
 
 		// validating token
@@ -150,8 +176,13 @@ public class PolicyController {
 	}
 
 	@PostMapping(path = "/updateEmail")
-	public ResponseEntity<ServiceRequestResponse> updateEmail(@RequestParam String email,
-			@RequestParam long policyNumber, @RequestParam String jwtToken) {
+	@ApiOperation(value = "Update yor email address",
+	notes = "Returns you a service ticket if alteast one record matches with you policy number",
+	response = Contact.class)
+	public ResponseEntity<ServiceRequestResponse> updateEmail(
+			@ApiParam(value = "EMail Address") @RequestParam String email,
+			@ApiParam(value = "Policy Number") @RequestParam long policyNumber,
+			@ApiParam(value = "JWT token generated previously") @RequestParam String jwtToken) {
 		logger.info("Serving request for update email");
 
 		// validating token
@@ -170,8 +201,13 @@ public class PolicyController {
 	}
 
 	@PostMapping(path = "/updatePanCard")
-	public ResponseEntity<ServiceRequestResponse> updatePanCard(@RequestParam String panCard,
-			@RequestParam long policyNumber, @RequestParam String jwtToken) {
+	@ApiOperation(value = "Update yor PAN card number",
+	notes = "Returns you a service ticket if alteast one record matches with you policy number",
+	response = Contact.class)
+	public ResponseEntity<ServiceRequestResponse> updatePanCard(
+			@ApiParam(value = "New PanCard Number")@RequestParam String panCard,
+			@ApiParam(value = "Refrence Policy Number") @RequestParam long policyNumber,
+			@ApiParam(value = "JWT token generated previously") @RequestParam String jwtToken) {
 		logger.info("Serving request for update pan card details");
 
 		// validating token
@@ -190,14 +226,22 @@ public class PolicyController {
 	}
 
 	@PostMapping(path = "/optForMobileOtpStepOne")
-	public ResponseEntity<StepComplitionResponse> MobileOtpInStepOne(@RequestParam long mobileNumber) {
+	@ApiOperation(value = "Step 1 for to opt in for mobile service",
+	notes = "Return \"Thank You for Optin Request Completed\" if you are new to this service \n or return's \"Optin OTP Sent on the Mobile Number\" if you are already using one ",
+	response = Contact.class)
+	public ResponseEntity<StepComplitionResponse> MobileOtpInStepOne(
+			@ApiParam(value = "Mobile Number") @RequestParam long mobileNumber) {
 		logger.info("Serving request for mobile opt in step one");
 		return new ResponseEntity<>(mobileOtpInStepOneService.processStepOne(mobileNumber), HttpStatus.OK);
 	}
 
 	@PostMapping(path = "/optForMobileOtpStepTwo")
-	public ResponseEntity<StepComplitionResponse> MobileOtpInStepTwo(@RequestParam long mobileNumber,
-			@RequestParam long otp) {
+	@ApiOperation(value = "Completing mobile service validation",
+	notes = "Returns \"Thank You for Optin Request Completed\" \n if you have opted for mobile service already \n else throes an error response",
+	response = Contact.class)
+	public ResponseEntity<StepComplitionResponse> MobileOtpInStepTwo(
+			@ApiParam(value = "Mobile Number") @RequestParam long mobileNumber,
+			@ApiParam(value = "OTP") @RequestParam long otp) {
 		logger.info("Serving request for mobile opt in step two");
 		return new ResponseEntity<>(mobileOtpInStepOneService.processStepTwo(mobileNumber, otp), HttpStatus.OK);
 	}
