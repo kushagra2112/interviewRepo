@@ -1,7 +1,7 @@
 -- Table 1
 
-create schema tata_aia;
-use tata_aia;
+create schema xangars-interview;
+use xangars-interview;
 
 create table `policies` (
 `Product_ID` bigint NOT NULL  ,
