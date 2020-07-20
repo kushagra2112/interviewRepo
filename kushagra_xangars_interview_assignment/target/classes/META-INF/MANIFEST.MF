@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: kushagra_xangars_interview_assignment
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: kusha
+Implementation-Vendor-Id: com.xangars.interview
+Build-Jdk: 1.8.0_131
+Implementation-URL: https://spring.io/projects/spring-boot/kushagra_xa
+ ngars_interview_assignment
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+
